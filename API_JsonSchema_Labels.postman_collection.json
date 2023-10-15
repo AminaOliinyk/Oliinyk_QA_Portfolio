@@ -1,0 +1,184 @@
+{
+	"info": {
+		"_postman_id": "4f0fb109-2ab3-4a0a-8435-922c30f6088c",
+		"name": "Oliinyk_JsonSchema_Labels",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24166237",
+		"_collection_link": "https://planetary-sunset-304141.postman.co/workspace/Oliinyk_Amina~23a0d2dd-34f8-4389-ba24-231454c4b9ab/collection/24166237-4f0fb109-2ab3-4a0a-8435-922c30f6088c?action=share&source=collection_link&creator=24166237"
+	},
+	"item": [
+		{
+			"name": "CreateLabels",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let labelName = pm.variables.replaceIn(\"{{$randomCatchPhrase}}\");\r",
+							"pm.collectionVariables.set(\"labelName\", labelName);\r",
+							"\r",
+							"console.log(labelName);\r",
+							"\r",
+							"//колір\r",
+							"let colorList = [\"berry_red\", \"light_blue\",\t\"red\", \"blue\", \"orange\", \"grape\", \"yellow\", \"violet\",\"olive_green\", \"lavender\", \"lime_green\", \"magenta\", \"green\", \"salmon\", \"mint_green\", \"charcoal\", \"teal\", \"grey\", \"sky_blue\", \"taupe\"];\r",
+							"\r",
+							"if (colorList && colorList.length > 0){\r",
+							"    //Generate a random index within the array length\r",
+							"    const randomIndex = Math.floor(Math.random() * colorList.length);\r",
+							"    //Get a random title\r",
+							"    const randomColor = colorList[randomIndex];\r",
+							"    //Set the random title as an environment variable\r",
+							"    pm.collectionVariables.set(\"randomColor\", randomColor);\r",
+							"    console.log(randomColor);\r",
+							"};\r",
+							"\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonResponseData = pm.response.json();\r",
+							"\r",
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": {\r",
+							"            \"type\": \"string\"\r",
+							"        },\r",
+							"        \"name\": {\r",
+							"            \"type\": \"string\"\r",
+							"        },\r",
+							"        \"color\": {\r",
+							"            \"type\": \"string\"\r",
+							"        },\r",
+							"        \"order\": {\r",
+							"            \"type\": \"integer\"\r",
+							"        },\r",
+							"        \"is_favorite\": {\r",
+							"            \"type\": \"boolean\"\r",
+							"        }       \r",
+							"    },\r",
+							"    \"required\": [\"id\", \"name\", \"color\", \"order\", \"is_favorite\"],\r",
+							"    \"additionalProperties\": false\r",
+							"}\r",
+							"    pm.test(\"Json schema is valid\", () => {\r",
+							"pm.response.to.have.jsonSchema(schema);\r",
+							"    })\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"2156154810\",\r\n    \"name\": \"{{labelName}}\",\r\n    \"color\": \"{{randomColor}}\",\r\n    \"order\": 1,\r\n    \"is_favorite\": false\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{mockUrlLabel}}/labels",
+					"host": [
+						"{{mockUrlLabel}}"
+					],
+					"path": [
+						"labels"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "CreateLabelsMock",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"2156154810\",\r\n    \"name\": \"{{labelName}}\",\r\n    \"color\": \"{{randomColor}}\",\r\n    \"order\": 1,\r\n    \"is_favorite\": false\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{mockUrlLabel}}/labels",
+							"host": [
+								"{{mockUrlLabel}}"
+							],
+							"path": [
+								"labels"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"Status\": \"200\",\n    \"id\": \"2169048091\",\n    \"name\": \"Persevering user-facing core\",\n    \"order\": 1,\n    \"color\": \"sky_blue\",\n    \"is_favorite\": false\n}"
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "projectname",
+			"value": ""
+		},
+		{
+			"key": "randomColor",
+			"value": ""
+		},
+		{
+			"key": "labelName",
+			"value": ""
+		}
+	]
+}

@@ -1,0 +1,197 @@
+{
+	"info": {
+		"_postman_id": "b7118eb0-150f-4876-81a8-06551e60a5b9",
+		"name": "Oliinyk_JsonSchema_Project",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24166237",
+		"_collection_link": "https://planetary-sunset-304141.postman.co/workspace/Oliinyk_Amina~23a0d2dd-34f8-4389-ba24-231454c4b9ab/collection/24166237-b7118eb0-150f-4876-81a8-06551e60a5b9?action=share&source=collection_link&creator=24166237"
+	},
+	"item": [
+		{
+			"name": "CreateProject",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"let projectname = pm.variables.replaceIn(\"{{$randomNoun}}\");\r",
+							"pm.collectionVariables.set(\"projectname\", projectname);\r",
+							"\r",
+							"console.log(projectname);\r",
+							"\r",
+							"//колір\r",
+							"//колір\r",
+							"let colorList = [\"berry_red\", \"light_blue\",\t\"red\", \"blue\", \"orange\", \"grape\", \"yellow\", \"violet\",\"olive_green\", \"lavender\", \"lime_green\", \"magenta\", \"green\", \"salmon\", \"mint_green\", \"charcoal\", \"teal\", \"grey\", \"sky_blue\", \"taupe\"];\r",
+							"\r",
+							"if (colorList && colorList.length > 0){\r",
+							"//Generate a random index within the array length\r",
+							"const randomIndex = Math.floor(Math.random() * colorList.length);\r",
+							"//Get a random title\r",
+							"const randomColor = colorList[randomIndex];\r",
+							"//Set the random title as an environment variable\r",
+							"pm.collectionVariables.set(\"randomColor\", randomColor);\r",
+							"};\r",
+							"console.log(\"randomColor\");"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonResponseData = pm.response.json();\r",
+							"\r",
+							"const schema = {\r",
+							"    \"type\": \"object\",\r",
+							"    \"properties\": {\r",
+							"        \"id\": {\r",
+							"            \"type\": \"string\"\r",
+							"        },\r",
+							"        \"name\": {\r",
+							"            \"type\": \"string\"\r",
+							"        },\r",
+							"        \"color\": {\r",
+							"            \"type\": \"string\"\r",
+							"        },\r",
+							"        \"order\": {\r",
+							"            \"type\": \"integer\"\r",
+							"        },\r",
+							"        \"is_favorite\": {\r",
+							"            \"type\": \"boolean\"\r",
+							"        },\r",
+							"        \"is_shared\": {\r",
+							"            \"type\": \"boolean\"\r",
+							"        },\r",
+							"        \"comment_count\": {\r",
+							"            \"type\": \"integer\"\r",
+							"        },\r",
+							"        \"is_inbox_project\": {\r",
+							"            \"type\": \"boolean\"\r",
+							"        },\r",
+							"        \"is_team_inbox\": {\r",
+							"            \"type\": \"boolean\"\r",
+							"        },\r",
+							"        \"view_style\": {\r",
+							"            \"type\": \"string\"\r",
+							"        },\r",
+							"        \"url\": {\r",
+							"            \"type\": \"string\"\r",
+							"        }       \r",
+							"    },\r",
+							"    \"required\": [\"id\", \"name\", \"color\", \"order\", \"is_favorite\"],\r",
+							"    \"additionalProperties\": true\r",
+							"}\r",
+							"    pm.test(\"Json schema is valid\", () => {\r",
+							"pm.response.to.have.jsonSchema(schema);\r",
+							"    })\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"2113\",\r\n    \"name\": \"{{projectname}}\",\r\n    \"comment_count\": 10,\r\n    \"order\": 1,\r\n    \"color\": \"{{randomColor}}\",\r\n    \"is_shared\": false,\r\n    \"is_favorite\": false,\r\n    \"is_inbox_project\": false,\r\n    \"is_team_inbox\": false,\r\n    \"view_style\": \"list\",\r\n    \"url\": \"https://todoist.com/showProject?id=2203306141\"\r\n}",
+					"options": {
+						"raw": {
+							"language": "json"
+						}
+					}
+				},
+				"url": {
+					"raw": "{{mockUrlProject}}/projects",
+					"host": [
+						"{{mockUrlProject}}"
+					],
+					"path": [
+						"projects"
+					]
+				}
+			},
+			"response": [
+				{
+					"name": "CreateProjectMock",
+					"originalRequest": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"2113\",\r\n    \"name\": \"{{projectname}}\",\r\n    \"comment_count\": 10,\r\n    \"order\": 1,\r\n    \"color\": \"{{randomColor}}\",\r\n    \"is_shared\": false,\r\n    \"is_favorite\": false,\r\n    \"is_inbox_project\": false,\r\n    \"is_team_inbox\": false,\r\n    \"view_style\": \"list\",\r\n    \"url\": \"https://todoist.com/showProject?id=2203306141\"\r\n}",
+							"options": {
+								"raw": {
+									"language": "json"
+								}
+							}
+						},
+						"url": {
+							"raw": "{{mockUrlProject}}/projects",
+							"host": [
+								"{{mockUrlProject}}"
+							],
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"_postman_previewlanguage": "json",
+					"header": [
+						{
+							"key": "Content-Type",
+							"value": "application/json",
+							"name": "Content-Type",
+							"description": "",
+							"type": "text"
+						}
+					],
+					"cookie": [],
+					"body": "{\n    \"Status code\": 200,\n    \n    \"id\": \"2113\",\n    \"name\": \"amina\",\n    \"comment_count\": 10,\n    \"order\": 1,\n    \"color\": \"white\",\n    \"is_shared\": true,\n    \"is_favorite\": true,\n    \"is_inbox_project\": false,\n    \"is_team_inbox\": false,\n    \"view_style\": \"list\",\n    \"url\": \"https://todoist.com/showProject?id=2203306141\"\n}"
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "projectname",
+			"value": ""
+		},
+		{
+			"key": "randomColor",
+			"value": ""
+		}
+	]
+}

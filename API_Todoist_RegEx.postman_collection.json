@@ -1,0 +1,373 @@
+{
+	"info": {
+		"_postman_id": "55ca4bac-e71f-4c70-a5d6-cb2260e2bc62",
+		"name": "Oliinyk_Todoist_Tasks_RegEx",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24166237",
+		"_collection_link": "https://planetary-sunset-304141.postman.co/workspace/Oliinyk_Amina~23a0d2dd-34f8-4389-ba24-231454c4b9ab/collection/24166237-55ca4bac-e71f-4c70-a5d6-cb2260e2bc62?action=share&source=collection_link&creator=24166237"
+	},
+	"item": [
+		{
+			"name": "CreateTask",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"//Save all keys from jsonResponsData\r",
+							"Object.keys(jsonData).forEach(function (key) {\r",
+							"pm.collectionVariables.set(\"task_\" + key, jsonData[key]);\r",
+							"});\r",
+							"\r",
+							"//Regex for check format\r",
+							"pm.test(\"created_at matches RFC3339 format\", function () {\r",
+							"    pm.expect(jsonData.created_at).to.match(/^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{1,9}Z)$/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"due_date matches YYYY-MM-DD format\", function () {\r",
+							"    pm.expect(jsonData.due.date).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"due_lang matches  ISO 639-1 format\", function () {\r",
+							"    pm.expect(jsonData.due.lang).to.match(/^[a-z]{2}$/);\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const min = 1; //min value\r",
+							"const max = 4; //max value\r",
+							"\r",
+							"const randomA = Math.floor(Math.random() * (max - min + 1)) + min;\r",
+							"\r",
+							"pm.collectionVariables.set('randomPriority', randomA);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-Request-Id",
+						"value": "$(uuidgen)"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"{{$randomStreetName}}\",\r\n    \"description\": \"do something\",\r\n    \"due_string\": \"tomorrow at 12:00\",\r\n    \"due_lang\": \"en\",\r\n    \"due_date\": \"2023-10-12\",\r\n    \"due_datetime\": \"2016-09-01T12:00:00.000000Z\",\r\n    \"priority\": {{randomPriority}}\r\n}"
+				},
+				"url": {
+					"raw": "{{path_url}}/tasks",
+					"host": [
+						"{{path_url}}"
+					],
+					"path": [
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllTask",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"pm.test(\"Response is an array\", function () {\r",
+							"    pm.expect(jsonData).to.be.an(\"array\");\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Content is required, check that is not empty and content is string\", function () {\r",
+							"        jsonData.forEach(function (task) {\r",
+							"        pm.expect(task.content).to.be.a('string').and.to.have.lengthOf.at.least(1);\r",
+							"    }); \r",
+							"});\r",
+							"\r",
+							"pm.test(\"At least one task\", function () {\r",
+							"    pm.expect(jsonData.length).to.be.greaterThan(0);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Priority is int\", function () {\r",
+							"        jsonData.forEach(function (task) { //пробігається по кожному об'єкту в масиві\r",
+							"        pm.expect(task.priority).to.be.an('number'); //перевіряє чи для кожного об'єкта тип даних int\r",
+							"    }); \r",
+							"});\r",
+							"\r",
+							"pm.test(\"due_date matches YYYY-MM-DD format\", function () {\r",
+							"    jsonData.forEach(function (task) {\r",
+							"    pm.expect(task.due.date).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"due is objects\", function () {\r",
+							"    jsonData.forEach(function (task) {\r",
+							"    pm.expect(task.due).be.an('object');\r",
+							"    });\r",
+							"});\r",
+							"\r",
+							"pm.test(\"due object is not empty\", function () {\r",
+							"    jsonData.forEach(function (task) {\r",
+							"    pm.expect(task.due).is.not.empty;\r",
+							"    });\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{path_url}}/tasks",
+					"host": [
+						"{{path_url}}"
+					],
+					"path": [
+						"tasks"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateTask",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"const jsonData = pm.response.json();\r",
+							"\r",
+							"//Save all keys from jsonResponsData\r",
+							"Object.keys(jsonData).forEach(function (key) {\r",
+							"pm.collectionVariables.set(\"task_\" + key, jsonData[key]);\r",
+							"});\r",
+							"\r",
+							"//Regex for check format\r",
+							"pm.test(\"created_at matches RFC3339 format\", function () {\r",
+							"    pm.expect(jsonData.created_at).to.match(/^(\\d{4}-\\d{2}-\\d{2}T\\d{2}:\\d{2}:\\d{2}\\.\\d{1,9}Z)$/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"due_date matches YYYY-MM-DD format\", function () {\r",
+							"    pm.expect(jsonData.due.date).to.match(/^\\d{4}-\\d{2}-\\d{2}$/);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"due_lang matches  ISO 639-1 format\", function () {\r",
+							"    pm.expect(jsonData.due.lang).to.match(/^[a-z]{2}$/);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"const min = 1; //min value\r",
+							"const max = 4; //max value\r",
+							"\r",
+							"const randomA = Math.floor(Math.random() * (max - min + 1)) + min;\r",
+							"\r",
+							"pm.collectionVariables.set('randomPriority', randomA);"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-Request-Id",
+						"value": "$(uuidgen)"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"content\": \"{{$randomStreetName}}\",\r\n    \"description\": \"{{$randomCatchPhrase}}\",\r\n    \"due_string\": \"today at 12:00\",\r\n    \"due_lang\": \"en\",\r\n    \"due_date\": \"2023-10-12\",\r\n    \"due_datetime\": \"2016-09-01T12:00:00.000000Z\",\r\n    \"priority\": {{randomPriority}}\r\n}"
+				},
+				"url": {
+					"raw": "{{path_url}}/tasks/{{task_id}}",
+					"host": [
+						"{{path_url}}"
+					],
+					"path": [
+						"tasks",
+						"{{task_id}}"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "DeleteTask",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful DELETE request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(204);\r",
+							"});\r",
+							"\r",
+							"// pm.test(\"Body is empty\", function () {\r",
+							"//     var jsonData = pm.response.json();\r",
+							"//     pm.expect(pm.response.json).is.null;\r",
+							"// });\r",
+							"\r",
+							"pm.test(\"Response time is less than 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "DELETE",
+				"header": [],
+				"url": {
+					"raw": "{{path_url}}/tasks/{{task_id}}",
+					"host": [
+						"{{path_url}}"
+					],
+					"path": [
+						"tasks",
+						"{{task_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "task_id",
+			"value": ""
+		},
+		{
+			"key": "task_assigner_id",
+			"value": ""
+		},
+		{
+			"key": "task_assignee_id",
+			"value": ""
+		},
+		{
+			"key": "task_project_id",
+			"value": ""
+		},
+		{
+			"key": "task_section_id",
+			"value": ""
+		},
+		{
+			"key": "task_parent_id",
+			"value": ""
+		},
+		{
+			"key": "task_order",
+			"value": ""
+		},
+		{
+			"key": "task_content",
+			"value": ""
+		},
+		{
+			"key": "task_description",
+			"value": ""
+		},
+		{
+			"key": "task_is_completed",
+			"value": ""
+		},
+		{
+			"key": "task_labels",
+			"value": ""
+		},
+		{
+			"key": "task_priority",
+			"value": ""
+		},
+		{
+			"key": "task_comment_count",
+			"value": ""
+		},
+		{
+			"key": "task_creator_id",
+			"value": ""
+		},
+		{
+			"key": "task_created_at",
+			"value": ""
+		},
+		{
+			"key": "task_due",
+			"value": ""
+		},
+		{
+			"key": "task_url",
+			"value": ""
+		},
+		{
+			"key": "task_duration",
+			"value": ""
+		},
+		{
+			"key": "randomPriority",
+			"value": ""
+		}
+	]
+}

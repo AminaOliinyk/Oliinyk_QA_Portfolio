@@ -1,0 +1,551 @@
+{
+	"info": {
+		"_postman_id": "f000c162-5b09-462b-b4e2-6a74080e9c98",
+		"name": "Oliinyk_PreRequest_todoist",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24166237",
+		"_collection_link": "https://planetary-sunset-304141.postman.co/workspace/Oliinyk_Amina~23a0d2dd-34f8-4389-ba24-231454c4b9ab/collection/24166237-f000c162-5b09-462b-b4e2-6a74080e9c98?action=share&source=collection_link&creator=24166237"
+	},
+	"item": [
+		{
+			"name": "DeleteScript",
+			"item": [
+				{
+					"name": "CreateProjectFORDelete",
+					"event": [
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"//очищає змінні записані в колекції\r",
+									"pm.collectionVariables.clear();\r",
+									"\r",
+									"//динамічна змінна для проекту\r",
+									"let projectname = pm.variables.replaceIn(\"{{$randomCatchPhrase}}\");\r",
+									"pm.collectionVariables.set(\"projectname\", projectname);\r",
+									"\r",
+									"console.log(projectname);\r",
+									"\r",
+									"//true/false\r",
+									"let boolean = [true, false];\r",
+									"\r",
+									"if (boolean && boolean.length > 0){\r",
+									"//Generate a random index within the array length\r",
+									"const randomIndex = Math.floor(Math.random() * boolean.length);\r",
+									"//Get a random title\r",
+									"const randomBoolean = boolean[randomIndex];\r",
+									"//Set the random title as an environment variable\r",
+									"pm.collectionVariables.set(\"randomBoolean\", randomBoolean);\r",
+									"console.log(randomBoolean);\r",
+									"};\r",
+									"\r",
+									"\r",
+									"//вигляд\r",
+									"let view = [\"list\", \"board\"];\r",
+									"\r",
+									"if (view && view.length > 0){\r",
+									"//Generate a random index within the array length\r",
+									"const randomIndex = Math.floor(Math.random() * view.length);\r",
+									"//Get a random title\r",
+									"const randomView = view[randomIndex];\r",
+									"//Set the random title as an environment variable\r",
+									"pm.collectionVariables.set(\"randomView\", randomView);\r",
+									"console.log(randomView);\r",
+									"};\r",
+									"\r",
+									"//колір\r",
+									"let colorList = [\"berry_red\", \"light_blue\",\t\"red\", \"blue\", \"orange\", \"grape\", \"yellow\", \"violet\",\"olive_green\", \"lavender\", \"lime_green\", \"magenta\", \"green\", \"salmon\", \"mint_green\", \"charcoal\", \"teal\", \"grey\", \"sky_blue\", \"taupe\"];\r",
+									"\r",
+									"if (colorList && colorList.length > 0){\r",
+									"//Generate a random index within the array length\r",
+									"const randomIndex = Math.floor(Math.random() * colorList.length);\r",
+									"//Get a random title\r",
+									"const randomColor = colorList[randomIndex];\r",
+									"//Set the random title as an environment variable\r",
+									"pm.collectionVariables.set(\"randomColor\", randomColor);\r",
+									"console.log(randomColor);\r",
+									"};"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"\r",
+									"var jsonResponseData = pm.response.json();\r",
+									"//Parse json data\r",
+									"pm.collectionVariables.set(\"project_id\", jsonResponseData.id);\r",
+									"\r",
+									"//зберігаємо реквест в змінній\r",
+									"pm.collectionVariables.set(\"createProjectRequest\", pm.request);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [
+							{
+								"key": "Content-Type",
+								"value": "application/json"
+							},
+							{
+								"key": "X-Request-Id",
+								"value": "$(uuidgen)"
+							}
+						],
+						"body": {
+							"mode": "raw",
+							"raw": "{\r\n    \"id\": \"2113\",\r\n    \"name\": \"{{projectname}}\",\r\n    \"color\": \"{{randomColor}}\",\r\n    \"is_shared\": {{randomBoolean}},\r\n    \"is_favorite\": {{randomBoolean}},\r\n    \"is_inbox_project\": {{randomBoolean}},\r\n    \"is_team_inbox\": {{randomBoolean}},\r\n    \"view_style\": \"{{randomView}}\"\r\n}"
+						},
+						"url": {
+							"raw": "{{path_url}}/projects",
+							"host": [
+								"{{path_url}}"
+							],
+							"path": [
+								"projects"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DeleteProject",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Successful DELETE request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.eql(204);\r",
+									"});\r",
+									"\r",
+									"// pm.test(\"Body is empty\", function () {\r",
+									"//     var jsonData = pm.response.json();\r",
+									"//     pm.expect(pm.response.json).is.;\r",
+									"// });\r",
+									"\r",
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						},
+						{
+							"listen": "prerequest",
+							"script": {
+								"exec": [
+									"pm.sendRequest(pm.collectionVariables.get(\"createProjectRequest\"));"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "DELETE",
+						"header": [],
+						"url": {
+							"raw": "{{path_url}}/projects/{{project_id}}",
+							"host": [
+								"{{path_url}}"
+							],
+							"path": [
+								"projects",
+								"{{project_id}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "CreateProject",
+			"event": [
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"//очищає змінні записані в колекції\r",
+							"pm.collectionVariables.clear();\r",
+							"\r",
+							"//динамічна змінна для проекту\r",
+							"let projectname = pm.variables.replaceIn(\"{{$randomCatchPhrase}}\");\r",
+							"pm.collectionVariables.set(\"projectname\", projectname);\r",
+							"\r",
+							"console.log(projectname);\r",
+							"\r",
+							"//true/false\r",
+							"let boolean = [true, false];\r",
+							"\r",
+							"if (boolean && boolean.length > 0){\r",
+							"//Generate a random index within the array length\r",
+							"const randomIndex = Math.floor(Math.random() * boolean.length);\r",
+							"//Get a random title\r",
+							"const randomBoolean = boolean[randomIndex];\r",
+							"//Set the random title as an environment variable\r",
+							"pm.collectionVariables.set(\"randomBoolean\", randomBoolean);\r",
+							"console.log(randomBoolean);\r",
+							"};\r",
+							"\r",
+							"\r",
+							"//вигляд\r",
+							"let view = [\"list\", \"board\"];\r",
+							"\r",
+							"if (view && view.length > 0){\r",
+							"//Generate a random index within the array length\r",
+							"const randomIndex = Math.floor(Math.random() * view.length);\r",
+							"//Get a random title\r",
+							"const randomView = view[randomIndex];\r",
+							"//Set the random title as an environment variable\r",
+							"pm.collectionVariables.set(\"randomView\", randomView);\r",
+							"console.log(randomView);\r",
+							"};\r",
+							"\r",
+							"//колір\r",
+							"let colorList = [\"berry_red\", \"light_blue\",\t\"red\", \"blue\", \"orange\", \"grape\", \"yellow\", \"violet\",\"olive_green\", \"lavender\", \"lime_green\", \"magenta\", \"green\", \"salmon\", \"mint_green\", \"charcoal\", \"teal\", \"grey\", \"sky_blue\", \"taupe\"];\r",
+							"\r",
+							"if (colorList && colorList.length > 0){\r",
+							"//Generate a random index within the array length\r",
+							"const randomIndex = Math.floor(Math.random() * colorList.length);\r",
+							"//Get a random title\r",
+							"const randomColor = colorList[randomIndex];\r",
+							"//Set the random title as an environment variable\r",
+							"pm.collectionVariables.set(\"randomColor\", randomColor);\r",
+							"console.log(randomColor);\r",
+							"};"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.environment.unset(\"project_order\");\r",
+							"\r",
+							"var jsonResponseData = pm.response.json();\r",
+							"//Parse json data\r",
+							"pm.collectionVariables.set(\"project_id\", jsonResponseData.id);\r",
+							"pm.collectionVariables.set(\"project_order\", jsonResponseData.order);\r",
+							"pm.collectionVariables.set(\"colour\", jsonResponseData.color);\r",
+							"pm.collectionVariables.set(\"project_name\", jsonResponseData.name);\r",
+							"pm.collectionVariables.set(\"project_url\", jsonResponseData.url);\r",
+							"pm.collectionVariables.set(\"view_style\", jsonResponseData.view_style);\r",
+							"pm.collectionVariables.set(\"parent_id\", jsonResponseData.parent_id);\r",
+							"pm.collectionVariables.set(\"comment_count\", jsonResponseData.comment_count);\r",
+							"pm.collectionVariables.set(\"is_shared\", jsonResponseData.is_shared);\r",
+							"pm.collectionVariables.set(\"is_favorite\", jsonResponseData.is_favorite);\r",
+							"pm.collectionVariables.set(\"is_inbox_project\", jsonResponseData.is_inbox_project);\r",
+							"pm.collectionVariables.set(\"is_team_inbox\", jsonResponseData.is_team_inbox);\r",
+							"\r",
+							"\r",
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Name and id of project is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(pm.response.json().name).to.eql(pm.collectionVariables.get(\"project_name\"));\r",
+							"    pm.expect(pm.response.json().id).to.eql(pm.collectionVariables.get(\"project_id\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ParrentID,commentCount,shared, favorite, inboxProject, tesmInbox is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(pm.response.json().parent_id).to.eql(pm.collectionVariables.get(\"parent_id\"));\r",
+							"    pm.expect(pm.response.json().comment_count).to.eql(pm.collectionVariables.get(\"comment_count\"));\r",
+							"    pm.expect(pm.response.json().is_shared).to.eql(pm.collectionVariables.get(\"is_shared\"));\r",
+							"    pm.expect(pm.response.json().is_favorite).to.eql(pm.collectionVariables.get(\"is_favorite\"));\r",
+							"    pm.expect(pm.response.json().is_inbox_project).to.eql(pm.collectionVariables.get(\"is_inbox_project\"));\r",
+							"    pm.expect(pm.response.json().is_team_inbox).to.eql(pm.collectionVariables.get(\"is_team_inbox\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Color, url, order and style is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(pm.response.json().color).to.eql(pm.collectionVariables.get(\"colour\"));\r",
+							"    pm.expect(pm.response.json().order).to.eql(pm.collectionVariables.get(\"project_order\"));\r",
+							"    pm.expect(pm.response.json().url).to.eql(pm.collectionVariables.get(\"project_url\"));\r",
+							"    pm.expect(pm.response.json().view_style).to.eql(pm.collectionVariables.get(\"view_style\"));\r",
+							"});\r",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-Request-Id",
+						"value": "$(uuidgen)"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"id\": \"2113\",\r\n    \"name\": \"{{projectname}}\",\r\n    \"color\": \"{{randomColor}}\",\r\n    \"is_shared\": {{randomBoolean}},\r\n    \"is_favorite\": {{randomBoolean}},\r\n    \"is_inbox_project\": {{randomBoolean}},\r\n    \"is_team_inbox\": {{randomBoolean}},\r\n    \"view_style\": \"{{randomView}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{path_url}}/projects",
+					"host": [
+						"{{path_url}}"
+					],
+					"path": [
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "GetAllProgect",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"//шукаємо проект в списку проектів",
+							"pm.test(\"Created project in list\", function(){",
+							"const responseBody = pm.response.json();",
+							"let projectexist = false;",
+							"",
+							"responseBody.forEach (function (project){",
+							"    if (project.id === pm.collectionVariables.get('project_id')){",
+							"        console.log('I found my project');",
+							"        projectexist = true;",
+							"    }",
+							"});",
+							"pm.expect(projectexist).to.be.true;",
+							"});",
+							"",
+							""
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "{{path_url}}/projects",
+					"host": [
+						"{{path_url}}"
+					],
+					"path": [
+						"projects"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "UpdateProject",
+			"event": [
+				{
+					"listen": "test",
+					"script": {
+						"exec": [
+							"pm.test(\"Successful POST request\", function () {\r",
+							"    pm.expect(pm.response.code).to.be.eql(200);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Name of project is updated\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(pm.response.json().name).to.not.be.eql(pm.collectionVariables.get(\"project_name\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Color and is_favorite is updated\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(pm.response.json().color).to.not.be.eql(pm.collectionVariables.get(\"colour\"));\r",
+							"    pm.expect(pm.response.json().is_favorite).to.not.be.eql(pm.collectionVariables.get(\"is_favorite\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"View style is updated\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(pm.response.json().view_style).to.not.be.eql(pm.collectionVariables.get(\"view_style\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Id of project is not changed\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(pm.response.json().id).to.be.eql(pm.collectionVariables.get(\"project_id\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Response time is less than 1000ms\", function () {\r",
+							"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+							"});\r",
+							"\r",
+							"pm.test(\"ParrentID,commentCount,shared, favorite, inboxProject, tesmInbox is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(pm.response.json().parent_id).to.eql(pm.collectionVariables.get(\"parent_id\"));\r",
+							"    pm.expect(pm.response.json().comment_count).to.eql(pm.collectionVariables.get(\"comment_count\"));\r",
+							"    pm.expect(pm.response.json().is_shared).to.eql(pm.collectionVariables.get(\"is_shared\"));\r",
+							"    pm.expect(pm.response.json().is_inbox_project).to.eql(pm.collectionVariables.get(\"is_inbox_project\"));\r",
+							"    pm.expect(pm.response.json().is_team_inbox).to.eql(pm.collectionVariables.get(\"is_team_inbox\"));\r",
+							"});\r",
+							"\r",
+							"pm.test(\"Url, order and style is correct\", function () {\r",
+							"    var jsonData = pm.response.json();\r",
+							"    pm.expect(pm.response.json().order).to.eql(pm.collectionVariables.get(\"project_order\"));\r",
+							"    pm.expect(pm.response.json().url).to.eql(pm.collectionVariables.get(\"project_url\"));\r",
+							"    pm.expect(pm.response.json().view_style).to.eql(pm.collectionVariables.get(\"view_style\"));\r",
+							"});"
+						],
+						"type": "text/javascript"
+					}
+				},
+				{
+					"listen": "prerequest",
+					"script": {
+						"exec": [
+							"\r",
+							"//динамічна змінна для проекту\r",
+							"let projectname = pm.variables.replaceIn(\"{{$randomCatchPhrase}}\");\r",
+							"pm.collectionVariables.set(\"projectname\", projectname);\r",
+							"\r",
+							"console.log(projectname);\r",
+							"\r",
+							"//true/false\r",
+							"let boolean = [true, false];\r",
+							"\r",
+							"if (boolean && boolean.length > 0){\r",
+							"//Generate a random index within the array length\r",
+							"const randomIndex = Math.floor(Math.random() * boolean.length);\r",
+							"//Get a random title\r",
+							"const randomBoolean = boolean[randomIndex];\r",
+							"//Set the random title as an environment variable\r",
+							"pm.collectionVariables.set(\"randomBoolean\", randomBoolean);\r",
+							"console.log(randomBoolean);\r",
+							"};\r",
+							"\r",
+							"\r",
+							"//вигляд\r",
+							"let view = [\"list\", \"board\"];\r",
+							"\r",
+							"if (view && view.length > 0){\r",
+							"//Generate a random index within the array length\r",
+							"const randomIndex = Math.floor(Math.random() * view.length);\r",
+							"//Get a random title\r",
+							"const randomView = view[randomIndex];\r",
+							"//Set the random title as an environment variable\r",
+							"pm.collectionVariables.set(\"randomView\", randomView);\r",
+							"console.log(randomView);\r",
+							"};\r",
+							"\r",
+							"//колір\r",
+							"let colorList = [\"berry_red\", \"light_blue\",\t\"red\", \"blue\", \"orange\", \"grape\", \"yellow\", \"violet\",\"olive_green\", \"lavender\", \"lime_green\", \"magenta\", \"green\", \"salmon\", \"mint_green\", \"charcoal\", \"teal\", \"grey\", \"sky_blue\", \"taupe\"];\r",
+							"\r",
+							"if (colorList && colorList.length > 0){\r",
+							"//Generate a random index within the array length\r",
+							"const randomIndex = Math.floor(Math.random() * colorList.length);\r",
+							"//Get a random title\r",
+							"const randomColor = colorList[randomIndex];\r",
+							"//Set the random title as an environment variable\r",
+							"pm.collectionVariables.set(\"randomColor\", randomColor);\r",
+							"console.log(randomColor);\r",
+							"};"
+						],
+						"type": "text/javascript"
+					}
+				}
+			],
+			"request": {
+				"method": "POST",
+				"header": [
+					{
+						"key": "Content-Type",
+						"value": "application/json"
+					},
+					{
+						"key": "X-Request-Id",
+						"value": "$(uuidgen)"
+					}
+				],
+				"body": {
+					"mode": "raw",
+					"raw": "{\r\n    \"name\": \"{{project_name}}\",\r\n    \"color\": \"{{randomColor}}\",\r\n    \"is_favorite\": {{randomBoolean}},\r\n    \"view_style\": \"{{randomView}}\"\r\n}"
+				},
+				"url": {
+					"raw": "{{path_url}}/projects/{{project_id}}",
+					"host": [
+						"{{path_url}}"
+					],
+					"path": [
+						"projects",
+						"{{project_id}}"
+					]
+				}
+			},
+			"response": []
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "projectname",
+			"value": ""
+		},
+		{
+			"key": "randomColor",
+			"value": ""
+		},
+		{
+			"key": "randomBoolean",
+			"value": ""
+		},
+		{
+			"key": "randomView",
+			"value": ""
+		},
+		{
+			"key": "project_id",
+			"value": ""
+		},
+		{
+			"key": "createProjectRequest",
+			"value": ""
+		}
+	]
+}

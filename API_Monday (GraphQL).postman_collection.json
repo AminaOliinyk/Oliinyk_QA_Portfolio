@@ -1,0 +1,1459 @@
+{
+	"info": {
+		"_postman_id": "ddde7aa1-7b57-4bcd-aa63-5700c0d0563d",
+		"name": "Oliinyk_Monday (from GraphQL)",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24166237",
+		"_collection_link": "https://planetary-sunset-304141.postman.co/workspace/Oliinyk_Amina~23a0d2dd-34f8-4389-ba24-231454c4b9ab/collection/24166237-ddde7aa1-7b57-4bcd-aa63-5700c0d0563d?action=share&source=collection_link&creator=24166237"
+	},
+	"item": [
+		{
+			"name": "mutations",
+			"item": [
+				{
+					"name": "DONE_create_board",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonResponseData = pm.response.json();\r",
+									"//Parse json data\r",
+									"pm.collectionVariables.set(\"board_id\", jsonResponseData.data.create_board.id);\r",
+									"pm.collectionVariables.set(\"board_kind\", jsonResponseData.data.create_board.board_kind);"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation create_board ($board_name: String!, $board_kind: BoardKind!, $description: String, $workspace_id: Int!) {\n    create_board (board_name: $board_name, board_kind: $board_kind, description: $description, workspace_id: $workspace_id) {\n        description\n        workspace_id\n        board_kind\n        id\n    }\n}\n",
+								"variables": "{\n  \"board_name\": \"amina board\",\n  \"description\": \"first board\",\n  \"board_kind\": \"private\",\n  \"workspace_id\": {{id}}\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DONE_create_workspace",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"var jsonResponseData = pm.response.json();\r",
+									"//Parse json data\r",
+									"pm.collectionVariables.set(\"id\", jsonResponseData.data.create_workspace.id);\r",
+									"pm.collectionVariables.set(\"state\", jsonResponseData.data.create_workspace.state);\r",
+									"pm.collectionVariables.set(\"kind\", jsonResponseData.data.create_workspace.kind);\r",
+									"\r",
+									"pm.test(\"Id of workspace is correct\", function () {\r",
+									"    var jsonData = pm.response.json();\r",
+									"    pm.expect(pm.response.json().data.create_workspace.id).to.eql(pm.collectionVariables.get(\"id\"));\r",
+									"});"
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation create_workspace ($name: String!, $kind: WorkspaceKind!, $description: String) {\n    create_workspace (name: $name, kind: $kind, description: $description) {\n        created_at\n        description\n        id\n        kind\n        name\n        state\n    }\n}",
+								"variables": "{\n  \"name\": \"amina`s first workspace\",\n  \"kind\": \"open\",\n  \"description\": \"firs  project first\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add_file_to_column",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation add_file_to_column ($item_id: Int!, $column_id: String!, $file: File!) {\n    add_file_to_column (item_id: $item_id, column_id: $column_id, file: $file) {\n        created_at\n        file_extension\n        file_size\n        id\n        name\n        original_geometry\n        public_url\n        url\n        url_thumbnail\n    }\n}",
+								"variables": "{\n  \"item_id\": 0,\n  \"column_id\": \"\",\n  \"file\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add_file_to_update",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation add_file_to_update ($update_id: Int!, $file: File!) {\n    add_file_to_update (update_id: $update_id, file: $file) {\n        created_at\n        file_extension\n        file_size\n        id\n        name\n        original_geometry\n        public_url\n        url\n        url_thumbnail\n    }\n}",
+								"variables": "{\n  \"update_id\": 0,\n  \"file\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add_teams_to_board",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation add_teams_to_board ($board_id: Int!, $team_ids: [Int]!) {\n    add_teams_to_board (board_id: $board_id, team_ids: $team_ids) {\n        id\n        name\n        picture_url\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"team_ids\": [\n    0\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add_teams_to_workspace",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation add_teams_to_workspace ($workspace_id: Int!, $team_ids: [Int]!, $kind: WorkspaceSubscriberKind) {\n    add_teams_to_workspace (workspace_id: $workspace_id, team_ids: $team_ids, kind: $kind) {\n        id\n        name\n        picture_url\n    }\n}",
+								"variables": "{\n  \"workspace_id\": 0,\n  \"team_ids\": [\n    0\n  ],\n  \"kind\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add_users_to_board",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation add_users_to_board ($board_id: Int!, $user_ids: [Int]!, $kind: BoardSubscriberKind) {\n    add_users_to_board (board_id: $board_id, user_ids: $user_ids, kind: $kind) {\n        birthday\n        country_code\n        created_at\n        current_language\n        email\n        enabled\n        id\n        is_admin\n        is_guest\n        is_pending\n        is_verified\n        is_view_only\n        join_date\n        last_activity\n        location\n        mobile_phone\n        name\n        phone\n        photo_original\n        photo_small\n        photo_thumb\n        photo_thumb_small\n        photo_tiny\n        sign_up_product_kind\n        time_zone_identifier\n        title\n        url\n        utc_hours_diff\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"user_ids\": [\n    0\n  ],\n  \"kind\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "add_users_to_workspace",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation add_users_to_workspace ($workspace_id: Int!, $user_ids: [Int]!, $kind: WorkspaceSubscriberKind) {\n    add_users_to_workspace (workspace_id: $workspace_id, user_ids: $user_ids, kind: $kind) {\n        birthday\n        country_code\n        created_at\n        current_language\n        email\n        enabled\n        id\n        is_admin\n        is_guest\n        is_pending\n        is_verified\n        is_view_only\n        join_date\n        last_activity\n        location\n        mobile_phone\n        name\n        phone\n        photo_original\n        photo_small\n        photo_thumb\n        photo_thumb_small\n        photo_tiny\n        sign_up_product_kind\n        time_zone_identifier\n        title\n        url\n        utc_hours_diff\n    }\n}",
+								"variables": "{\n  \"workspace_id\": 0,\n  \"user_ids\": [\n    0\n  ],\n  \"kind\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "archive_board",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation archive_board ($board_id: Int!) {\n    archive_board (board_id: $board_id) {\n        board_folder_id\n        board_kind\n        communication\n        description\n        id\n        item_terminology\n        items_count\n        name\n        permissions\n        state\n        type\n        updated_at\n        workspace_id\n    }\n}",
+								"variables": "{\n  \"board_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "archive_group",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation archive_group ($board_id: Int!, $group_id: String!) {\n    archive_group (board_id: $board_id, group_id: $group_id) {\n        archived\n        color\n        deleted\n        id\n        position\n        title\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"group_id\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "archive_item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation archive_item ($item_id: Int) {\n    archive_item (item_id: $item_id) {\n        created_at\n        creator_id\n        email\n        id\n        name\n        relative_link\n        state\n        updated_at\n    }\n}",
+								"variables": "{\n  \"item_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change_column_metadata",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation change_column_metadata ($column_id: String!, $board_id: Int!, $column_property: ColumnProperty, $value: String) {\n    change_column_metadata (column_id: $column_id, board_id: $board_id, column_property: $column_property, value: $value) {\n        archived\n        description\n        id\n        settings_str\n        title\n        type\n        width\n    }\n}",
+								"variables": "{\n  \"column_id\": \"\",\n  \"board_id\": 0,\n  \"column_property\": \"\",\n  \"value\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change_column_title",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation change_column_title ($column_id: String!, $board_id: Int!, $title: String!) {\n    change_column_title (column_id: $column_id, board_id: $board_id, title: $title) {\n        archived\n        description\n        id\n        settings_str\n        title\n        type\n        width\n    }\n}",
+								"variables": "{\n  \"column_id\": \"\",\n  \"board_id\": 0,\n  \"title\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change_column_value",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation change_column_value ($item_id: Int, $column_id: String!, $board_id: Int!, $value: JSON!, $create_labels_if_missing: Boolean) {\n    change_column_value (item_id: $item_id, column_id: $column_id, board_id: $board_id, value: $value, create_labels_if_missing: $create_labels_if_missing) {\n        created_at\n        creator_id\n        email\n        id\n        name\n        relative_link\n        state\n        updated_at\n    }\n}",
+								"variables": "{\n  \"item_id\": 0,\n  \"column_id\": \"\",\n  \"board_id\": 0,\n  \"value\": \"\",\n  \"create_labels_if_missing\": true\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change_multiple_column_values",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation change_multiple_column_values ($item_id: Int, $board_id: Int!, $column_values: JSON!, $create_labels_if_missing: Boolean) {\n    change_multiple_column_values (item_id: $item_id, board_id: $board_id, column_values: $column_values, create_labels_if_missing: $create_labels_if_missing) {\n        created_at\n        creator_id\n        email\n        id\n        name\n        relative_link\n        state\n        updated_at\n    }\n}",
+								"variables": "{\n  \"item_id\": 0,\n  \"board_id\": 0,\n  \"column_values\": \"\",\n  \"create_labels_if_missing\": true\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "change_simple_column_value",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation change_simple_column_value ($item_id: Int, $column_id: String!, $board_id: Int!, $value: String!, $create_labels_if_missing: Boolean) {\n    change_simple_column_value (item_id: $item_id, column_id: $column_id, board_id: $board_id, value: $value, create_labels_if_missing: $create_labels_if_missing) {\n        created_at\n        creator_id\n        email\n        id\n        name\n        relative_link\n        state\n        updated_at\n    }\n}",
+								"variables": "{\n  \"item_id\": 0,\n  \"column_id\": \"\",\n  \"board_id\": 0,\n  \"value\": \"\",\n  \"create_labels_if_missing\": true\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "clear_item_updates",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation clear_item_updates ($item_id: Int!) {\n    clear_item_updates (item_id: $item_id) {\n        created_at\n        creator_id\n        email\n        id\n        name\n        relative_link\n        state\n        updated_at\n    }\n}",
+								"variables": "{\n  \"item_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "complexity",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation complexity {\n    complexity {\n        after\n        before\n        query\n        reset_in_x_seconds\n    }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_column",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation create_column ($board_id: Int!, $title: String!, $description: String, $column_type: ColumnType, $defaults: JSON, $id: String, $after_column_id: ID) {\n    create_column (board_id: $board_id, title: $title, description: $description, column_type: $column_type, defaults: $defaults, id: $id, after_column_id: $after_column_id) {\n        archived\n        description\n        id\n        settings_str\n        title\n        type\n        width\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"title\": \"\",\n  \"description\": \"\",\n  \"column_type\": \"\",\n  \"defaults\": \"\",\n  \"id\": \"\",\n  \"after_column_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_folder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation create_folder ($workspace_id: Int, $name: String!, $color: FolderColor, $parent_folder_id: Int) {\n    create_folder (workspace_id: $workspace_id, name: $name, color: $color, parent_folder_id: $parent_folder_id) {\n        color\n        created_at\n        id\n        name\n        owner_id\n    }\n}",
+								"variables": "{\n  \"workspace_id\": 0,\n  \"name\": \"\",\n  \"color\": \"\",\n  \"parent_folder_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_group",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation create_group ($board_id: Int!, $group_name: String!, $position: String, $relative_to: String, $position_relative_method: PositionRelative) {\n    create_group (board_id: $board_id, group_name: $group_name, position: $position, relative_to: $relative_to, position_relative_method: $position_relative_method) {\n        archived\n        color\n        deleted\n        id\n        position\n        title\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"group_name\": \"\",\n  \"position\": \"\",\n  \"relative_to\": \"\",\n  \"position_relative_method\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation create_item ($item_name: String, $board_id: Int!, $group_id: String, $column_values: JSON, $create_labels_if_missing: Boolean) {\n    create_item (item_name: $item_name, board_id: $board_id, group_id: $group_id, column_values: $column_values, create_labels_if_missing: $create_labels_if_missing) {\n        created_at\n        creator_id\n        email\n        id\n        name\n        relative_link\n        state\n        updated_at\n    }\n}",
+								"variables": "{\n  \"item_name\": \"\",\n  \"board_id\": 0,\n  \"group_id\": \"\",\n  \"column_values\": \"\",\n  \"create_labels_if_missing\": true\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_notification",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation create_notification ($text: String!, $user_id: Int!, $target_id: Int!, $target_type: NotificationTargetType!) {\n    create_notification (text: $text, user_id: $user_id, target_id: $target_id, target_type: $target_type) {\n        id\n        text\n    }\n}",
+								"variables": "{\n  \"text\": \"\",\n  \"user_id\": 0,\n  \"target_id\": 0,\n  \"target_type\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_or_get_tag",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation create_or_get_tag ($tag_name: String, $board_id: Int) {\n    create_or_get_tag (tag_name: $tag_name, board_id: $board_id) {\n        color\n        id\n        name\n    }\n}",
+								"variables": "{\n  \"tag_name\": \"\",\n  \"board_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_subitem",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation create_subitem ($parent_item_id: Int!, $item_name: String!, $column_values: JSON, $create_labels_if_missing: Boolean) {\n    create_subitem (parent_item_id: $parent_item_id, item_name: $item_name, column_values: $column_values, create_labels_if_missing: $create_labels_if_missing) {\n        created_at\n        creator_id\n        email\n        id\n        name\n        relative_link\n        state\n        updated_at\n    }\n}",
+								"variables": "{\n  \"parent_item_id\": 0,\n  \"item_name\": \"\",\n  \"column_values\": \"\",\n  \"create_labels_if_missing\": true\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_update",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation create_update ($body: String!, $item_id: Int, $parent_id: Int) {\n    create_update (body: $body, item_id: $item_id, parent_id: $parent_id) {\n        body\n        created_at\n        creator_id\n        id\n        item_id\n        text_body\n        updated_at\n    }\n}",
+								"variables": "{\n  \"body\": \"\",\n  \"item_id\": 0,\n  \"parent_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "create_webhook",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation create_webhook ($board_id: Int!, $url: String!, $event: WebhookEventType!, $config: JSON) {\n    create_webhook (board_id: $board_id, url: $url, event: $event, config: $config) {\n        board_id\n        config\n        event\n        id\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"url\": \"\",\n  \"event\": \"\",\n  \"config\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_board",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation delete_board ($board_id: Int!) {\n    delete_board (board_id: $board_id) {\n        board_folder_id\n        board_kind\n        communication\n        description\n        id\n        item_terminology\n        items_count\n        name\n        permissions\n        state\n        type\n        updated_at\n        workspace_id\n    }\n}",
+								"variables": "{\n  \"board_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_column",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation delete_column ($board_id: Int!, $column_id: String!) {\n    delete_column (board_id: $board_id, column_id: $column_id) {\n        archived\n        description\n        id\n        settings_str\n        title\n        type\n        width\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"column_id\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_folder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation delete_folder ($folder_id: Int!) {\n    delete_folder (folder_id: $folder_id) {\n        color\n        created_at\n        id\n        name\n        owner_id\n    }\n}",
+								"variables": "{\n  \"folder_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_group",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation delete_group ($board_id: Int!, $group_id: String!) {\n    delete_group (board_id: $board_id, group_id: $group_id) {\n        archived\n        color\n        deleted\n        id\n        position\n        title\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"group_id\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation delete_item ($item_id: Int) {\n    delete_item (item_id: $item_id) {\n        created_at\n        creator_id\n        email\n        id\n        name\n        relative_link\n        state\n        updated_at\n    }\n}",
+								"variables": "{\n  \"item_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_subscribers_from_board",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation delete_subscribers_from_board ($board_id: Int!, $user_ids: [Int]!) {\n    delete_subscribers_from_board (board_id: $board_id, user_ids: $user_ids) {\n        birthday\n        country_code\n        created_at\n        current_language\n        email\n        enabled\n        id\n        is_admin\n        is_guest\n        is_pending\n        is_verified\n        is_view_only\n        join_date\n        last_activity\n        location\n        mobile_phone\n        name\n        phone\n        photo_original\n        photo_small\n        photo_thumb\n        photo_thumb_small\n        photo_tiny\n        sign_up_product_kind\n        time_zone_identifier\n        title\n        url\n        utc_hours_diff\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"user_ids\": [\n    0\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_teams_from_workspace",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation delete_teams_from_workspace ($workspace_id: Int!, $team_ids: [Int]!) {\n    delete_teams_from_workspace (workspace_id: $workspace_id, team_ids: $team_ids) {\n        id\n        name\n        picture_url\n    }\n}",
+								"variables": "{\n  \"workspace_id\": 0,\n  \"team_ids\": [\n    0\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_update",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation delete_update ($id: Int!) {\n    delete_update (id: $id) {\n        body\n        created_at\n        creator_id\n        id\n        item_id\n        text_body\n        updated_at\n    }\n}",
+								"variables": "{\n  \"id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_users_from_workspace",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation delete_users_from_workspace ($workspace_id: Int!, $user_ids: [Int]!) {\n    delete_users_from_workspace (workspace_id: $workspace_id, user_ids: $user_ids) {\n        birthday\n        country_code\n        created_at\n        current_language\n        email\n        enabled\n        id\n        is_admin\n        is_guest\n        is_pending\n        is_verified\n        is_view_only\n        join_date\n        last_activity\n        location\n        mobile_phone\n        name\n        phone\n        photo_original\n        photo_small\n        photo_thumb\n        photo_thumb_small\n        photo_tiny\n        sign_up_product_kind\n        time_zone_identifier\n        title\n        url\n        utc_hours_diff\n    }\n}",
+								"variables": "{\n  \"workspace_id\": 0,\n  \"user_ids\": [\n    0\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_webhook",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation delete_webhook ($id: Int!) {\n    delete_webhook (id: $id) {\n        board_id\n        config\n        event\n        id\n    }\n}",
+								"variables": "{\n  \"id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "delete_workspace",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation delete_workspace ($workspace_id: Int!) {\n    delete_workspace (workspace_id: $workspace_id) {\n        created_at\n        description\n        id\n        kind\n        name\n        state\n    }\n}",
+								"variables": "{\n  \"workspace_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "duplicate_board",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation duplicate_board ($board_id: Int!, $duplicate_type: DuplicateBoardType!, $board_name: String, $workspace_id: Int, $folder_id: Int, $keep_subscribers: Boolean) {\n    duplicate_board (board_id: $board_id, duplicate_type: $duplicate_type, board_name: $board_name, workspace_id: $workspace_id, folder_id: $folder_id, keep_subscribers: $keep_subscribers) {\n        is_async\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"duplicate_type\": \"\",\n  \"board_name\": \"\",\n  \"workspace_id\": 0,\n  \"folder_id\": 0,\n  \"keep_subscribers\": true\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "duplicate_group",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation duplicate_group ($board_id: Int!, $group_id: String!, $add_to_top: Boolean, $group_title: String) {\n    duplicate_group (board_id: $board_id, group_id: $group_id, add_to_top: $add_to_top, group_title: $group_title) {\n        archived\n        color\n        deleted\n        id\n        position\n        title\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"group_id\": \"\",\n  \"add_to_top\": true,\n  \"group_title\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "duplicate_item",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation duplicate_item ($board_id: Int!, $with_updates: Boolean, $item_id: Int) {\n    duplicate_item (board_id: $board_id, with_updates: $with_updates, item_id: $item_id) {\n        created_at\n        creator_id\n        email\n        id\n        name\n        relative_link\n        state\n        updated_at\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"with_updates\": true,\n  \"item_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "like_update",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation like_update ($update_id: Int) {\n    like_update (update_id: $update_id) {\n        body\n        created_at\n        creator_id\n        id\n        item_id\n        text_body\n        updated_at\n    }\n}",
+								"variables": "{\n  \"update_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "move_item_to_group",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation move_item_to_group ($item_id: Int, $group_id: String!) {\n    move_item_to_group (item_id: $item_id, group_id: $group_id) {\n        created_at\n        creator_id\n        email\n        id\n        name\n        relative_link\n        state\n        updated_at\n    }\n}",
+								"variables": "{\n  \"item_id\": 0,\n  \"group_id\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_board",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation update_board ($board_id: Int!, $board_attribute: BoardAttributes!, $new_value: String!) {\n    update_board (board_id: $board_id, board_attribute: $board_attribute, new_value: $new_value)\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"board_attribute\": \"\",\n  \"new_value\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_folder",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation update_folder ($folder_id: Int!, $name: String, $color: FolderColor, $parent_folder_id: Int) {\n    update_folder (folder_id: $folder_id, name: $name, color: $color, parent_folder_id: $parent_folder_id) {\n        color\n        created_at\n        id\n        name\n        owner_id\n    }\n}",
+								"variables": "{\n  \"folder_id\": 0,\n  \"name\": \"\",\n  \"color\": \"\",\n  \"parent_folder_id\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "update_group",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "mutation update_group ($board_id: Int!, $group_id: String!, $group_attribute: GroupAttributes!, $new_value: String!) {\n    update_group (board_id: $board_id, group_id: $group_id, group_attribute: $group_attribute, new_value: $new_value) {\n        archived\n        color\n        deleted\n        id\n        position\n        title\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"group_id\": \"\",\n  \"group_attribute\": \"\",\n  \"new_value\": \"\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		},
+		{
+			"name": "queries",
+			"item": [
+				{
+					"name": "DONE_boards",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Response time is less than 1000ms\", function () {\r",
+									"    pm.expect(pm.response.responseTime).to.be.below(1000);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Successful POST request\", function () {\r",
+									"    pm.expect(pm.response.code).to.be.oneOf([201, 202]);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query boards ($limit: Int, $page: Int, $ids: [Int], $board_kind: BoardKind, $state: State, $newest_first: Boolean, $order_by: BoardsOrderBy, $workspace_ids: [Int]) {\n    boards (limit: $limit, page: $page, ids: $ids, board_kind: $board_kind, state: $state, newest_first: $newest_first, order_by: $order_by, workspace_ids: $workspace_ids) {\n        board_folder_id\n        board_kind\n        communication\n        description\n        id\n        item_terminology\n        items_count\n        name\n        permissions\n        state\n        type\n        updated_at\n        workspace_id\n    }\n}",
+								"variables": "{\n  \"limit\": 1,\n  \"page\": 1,\n  \"ids\": [\n    {{board_id}}\n  ],\n  \"board_kind\": \"{{board_kind}}\",\n  \"state\": \"all\",\n  \"newest_first\": true,\n  \"order_by\": \"created_at\",\n  \"workspace_ids\": [\n    {{id}}\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "DONE_workspaces",
+					"event": [
+						{
+							"listen": "test",
+							"script": {
+								"exec": [
+									"pm.test(\"Status code is 200\", function () {\r",
+									"    pm.response.to.have.status(200);\r",
+									"});\r",
+									"\r",
+									"pm.test(\"Content-Type is present\", function () {\r",
+									"    pm.response.to.have.header(\"Content-Type\");\r",
+									"});\r",
+									""
+								],
+								"type": "text/javascript"
+							}
+						}
+					],
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query workspaces ($limit: Int, $page: Int, $ids: [Int], $kind: WorkspaceKind, $state: State, $order_by: WorkspacesOrderBy) {\n    workspaces (limit: $limit, page: $page, ids: $ids, kind: $kind, state: $state, order_by: $order_by) {\n        created_at\n        description\n        id\n        kind\n        name\n        state\n    }\n}",
+								"variables": "{\n  \"limit\": 1,\n  \"page\": 0,\n  \"ids\": [\n    {{id}}\n  ],\n  \"kind\": \"{{kind}}\",\n  \"state\": \"{{state}}\",\n  \"order_by\": \"created_at\"\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "account",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query account {\n    account {\n        country_code\n        first_day_of_the_week\n        id\n        logo\n        name\n        show_timeline_weekends\n        sign_up_product_kind\n        slug\n        tier\n    }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "apps_monetization_status",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query apps_monetization_status {\n    apps_monetization_status {\n        is_supported\n    }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "assets",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query assets ($ids: [Int]!) {\n    assets (ids: $ids) {\n        created_at\n        file_extension\n        file_size\n        id\n        name\n        original_geometry\n        public_url\n        url\n        url_thumbnail\n    }\n}",
+								"variables": "{\n  \"ids\": [\n    0\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "complexity",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query complexity {\n    complexity {\n        after\n        before\n        query\n        reset_in_x_seconds\n    }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "folders",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query folders ($limit: Int, $page: Int, $ids: [Int!], $workspace_ids: [Int]) {\n    folders (limit: $limit, page: $page, ids: $ids, workspace_ids: $workspace_ids) {\n        color\n        created_at\n        id\n        name\n        owner_id\n    }\n}",
+								"variables": "{\n  \"limit\": 0,\n  \"page\": 0,\n  \"ids\": [\n    0\n  ],\n  \"workspace_ids\": [\n    0\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "items",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query items ($limit: Int, $page: Int, $ids: [Int], $newest_first: Boolean, $exclude_nonactive: Boolean) {\n    items (limit: $limit, page: $page, ids: $ids, newest_first: $newest_first, exclude_nonactive: $exclude_nonactive) {\n        created_at\n        creator_id\n        email\n        id\n        name\n        relative_link\n        state\n        updated_at\n    }\n}",
+								"variables": "{\n  \"limit\": 0,\n  \"page\": 0,\n  \"ids\": [\n    0\n  ],\n  \"newest_first\": true,\n  \"exclude_nonactive\": true\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "me",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query me {\n    me {\n        birthday\n        country_code\n        created_at\n        current_language\n        email\n        enabled\n        id\n        is_admin\n        is_guest\n        is_pending\n        is_verified\n        is_view_only\n        join_date\n        last_activity\n        location\n        mobile_phone\n        name\n        phone\n        photo_original\n        photo_small\n        photo_thumb\n        photo_thumb_small\n        photo_tiny\n        sign_up_product_kind\n        time_zone_identifier\n        title\n        url\n        utc_hours_diff\n    }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "tags",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query tags ($ids: [Int]) {\n    tags (ids: $ids) {\n        color\n        id\n        name\n    }\n}",
+								"variables": "{\n  \"ids\": [\n    0\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "teams",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query teams ($ids: [Int]) {\n    teams (ids: $ids) {\n        id\n        name\n        picture_url\n    }\n}",
+								"variables": "{\n  \"ids\": [\n    0\n  ]\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "updates",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query updates ($limit: Int, $page: Int) {\n    updates (limit: $limit, page: $page) {\n        body\n        created_at\n        creator_id\n        id\n        item_id\n        text_body\n        updated_at\n    }\n}",
+								"variables": "{\n  \"limit\": 0,\n  \"page\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "users",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query users ($ids: [Int], $kind: UserKind, $newest_first: Boolean, $emails: [String], $name: String, $non_active: Boolean, $limit: Int, $page: Int) {\n    users (ids: $ids, kind: $kind, newest_first: $newest_first, emails: $emails, name: $name, non_active: $non_active, limit: $limit, page: $page) {\n        birthday\n        country_code\n        created_at\n        current_language\n        email\n        enabled\n        id\n        is_admin\n        is_guest\n        is_pending\n        is_verified\n        is_view_only\n        join_date\n        last_activity\n        location\n        mobile_phone\n        name\n        phone\n        photo_original\n        photo_small\n        photo_thumb\n        photo_thumb_small\n        photo_tiny\n        sign_up_product_kind\n        time_zone_identifier\n        title\n        url\n        utc_hours_diff\n    }\n}",
+								"variables": "{\n  \"ids\": [\n    0\n  ],\n  \"kind\": \"\",\n  \"newest_first\": true,\n  \"emails\": [\n    \"\"\n  ],\n  \"name\": \"\",\n  \"non_active\": true,\n  \"limit\": 0,\n  \"page\": 0\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "version",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query version {\n    version {\n        kind\n        value\n    }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "versions",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query versions {\n    versions {\n        kind\n        value\n    }\n}",
+								"variables": "{}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				},
+				{
+					"name": "webhooks",
+					"request": {
+						"method": "POST",
+						"header": [],
+						"body": {
+							"mode": "graphql",
+							"graphql": {
+								"query": "query webhooks ($board_id: Int!, $app_webhooks_only: Boolean) {\n    webhooks (board_id: $board_id, app_webhooks_only: $app_webhooks_only) {\n        board_id\n        config\n        event\n        id\n    }\n}",
+								"variables": "{\n  \"board_id\": 0,\n  \"app_webhooks_only\": true\n}"
+							}
+						},
+						"url": {
+							"raw": "{{url}}",
+							"host": [
+								"{{url}}"
+							]
+						}
+					},
+					"response": []
+				}
+			]
+		}
+	],
+	"auth": {
+		"type": "bearer",
+		"bearer": [
+			{
+				"key": "token",
+				"value": "{{token_monday}}",
+				"type": "string"
+			}
+		]
+	},
+	"event": [
+		{
+			"listen": "prerequest",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		},
+		{
+			"listen": "test",
+			"script": {
+				"type": "text/javascript",
+				"exec": [
+					""
+				]
+			}
+		}
+	],
+	"variable": [
+		{
+			"key": "url",
+			"value": "https://api.monday.com/v2",
+			"type": "any"
+		},
+		{
+			"key": "token_monday",
+			"value": "eyJhbGciOiJIUzI1NiJ9.eyJ0aWQiOjI4Njc5NzI4OCwiYWFpIjoxMSwidWlkIjo0OTkxMTI4OCwiaWFkIjoiMjAyMy0xMC0wNlQwNDo1MDo0Mi40ODFaIiwicGVyIjoibWU6d3JpdGUiLCJhY3RpZCI6MTkxODExMDgsInJnbiI6ImV1YzEifQ.UGuVkTX_eSYxkQqpjC7e_FGr6BfAoAzTV1pFXz3zUxw ",
+			"type": "string"
+		},
+		{
+			"key": "id",
+			"value": ""
+		},
+		{
+			"key": "state",
+			"value": ""
+		},
+		{
+			"key": "kind",
+			"value": ""
+		},
+		{
+			"key": "board_id",
+			"value": ""
+		},
+		{
+			"key": "board_kind",
+			"value": ""
+		}
+	]
+}

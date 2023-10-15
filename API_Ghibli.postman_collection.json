@@ -1,0 +1,125 @@
+{
+	"info": {
+		"_postman_id": "0a7d85d9-da32-475d-b402-b05f82356296",
+		"name": "Oliinyk_Ghibli",
+		"schema": "https://schema.getpostman.com/json/collection/v2.1.0/collection.json",
+		"_exporter_id": "24166237",
+		"_collection_link": "https://planetary-sunset-304141.postman.co/workspace/My-Workspace~edb429db-4928-4537-83ba-2a1be3449d0f/collection/24166237-0a7d85d9-da32-475d-b402-b05f82356296?action=share&source=collection_link&creator=24166237"
+	},
+	"item": [
+		{
+			"name": "All films",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ghibliapi.vercel.app/films",
+					"protocol": "https",
+					"host": [
+						"ghibliapi",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"films"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "All films request - one received",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ghibliapi.vercel.app/films?limit=1",
+					"protocol": "https",
+					"host": [
+						"ghibliapi",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"films"
+					],
+					"query": [
+						{
+							"key": "limit",
+							"value": "1"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "One film",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ghibliapi.vercel.app/films/12cfb892-aac0-4c5b-94af-521852e46d6a",
+					"protocol": "https",
+					"host": [
+						"ghibliapi",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"films",
+						"12cfb892-aac0-4c5b-94af-521852e46d6a"
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "People - Haku",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ghibliapi.vercel.app/people?name=Haku",
+					"protocol": "https",
+					"host": [
+						"ghibliapi",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"people"
+					],
+					"query": [
+						{
+							"key": "name",
+							"value": "Haku"
+						}
+					]
+				}
+			},
+			"response": []
+		},
+		{
+			"name": "Film with Haku",
+			"request": {
+				"method": "GET",
+				"header": [],
+				"url": {
+					"raw": "https://ghibliapi.vercel.app/films/dc2e6bd1-8156-4886-adff-b39e6043af0c",
+					"protocol": "https",
+					"host": [
+						"ghibliapi",
+						"vercel",
+						"app"
+					],
+					"path": [
+						"films",
+						"dc2e6bd1-8156-4886-adff-b39e6043af0c"
+					]
+				}
+			},
+			"response": []
+		}
+	]
+}
